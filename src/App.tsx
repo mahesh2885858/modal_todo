@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import { useState, useRef } from "react";
+import "./app.scss";
 function App() {
+  const [showModal, setShowModal] = useState(false);
+  const inputref = useRef<null | HTMLInputElement>(null);
+  const [todo, setTodos] = useState<string[]>([]);
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const addTodo = () => {
+    const item = inputref.current?.value;
+    setTodos((x: string[] | any) => {
+      return [...x, item];
+    });
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Modal</h1>
+      {todo.map((item) => {
+        return <li>{item}</li>;
+      })}
+      <div id="modal" className={showModal ? "modal-show" : "hide-modal"}>
+        <div className="modal-content">
+          <input ref={inputref} type="text" />
+          <button onClick={addTodo}>Add Todo</button>
+          <button onClick={() => setShowModal(false)}>Close</button>
+        </div>
+      </div>
+      <button onClick={openModal}>Click Me!</button>
     </div>
   );
 }
